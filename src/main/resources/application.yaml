@@ -1,0 +1,15 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /oop
+
+spring:
+  datasource:
+    url: "jdbc:mysql://127.0.0.1:3306/do_an_oop"
+    username: root
+    password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
