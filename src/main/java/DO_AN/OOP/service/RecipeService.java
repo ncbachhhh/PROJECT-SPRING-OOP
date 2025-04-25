@@ -1,0 +1,35 @@
+package DO_AN.OOP.service;
+
+import DO_AN.OOP.dto.request.RecipeCreationReq;
+import DO_AN.OOP.modal.DISHES.Recipe;
+import DO_AN.OOP.modal.DISHES.RecipeIngredient;
+import DO_AN.OOP.repository.DISHES.RecipeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class RecipeService {
+    @Autowired
+    private RecipeRepository recipeRepository;
+
+    public Recipe createRecipe(RecipeCreationReq req) {
+        List<RecipeIngredient> ingredients = req.getIngredients().stream()
+                .map(i -> RecipeIngredient.builder()
+                        .id(i.getId())
+                        .quantity(i.getQuantity())
+                        .build())
+                .collect(Collectors.toList());
+
+        Recipe recipe = Recipe.builder()
+                .name(req.getName())
+                .description(req.getDescription())
+                .userId(req.getUserId())
+                .ingredients(ingredients)
+                .build();
+
+        return recipeRepository.save(recipe);
+    }
+}
