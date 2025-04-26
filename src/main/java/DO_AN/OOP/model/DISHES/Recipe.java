@@ -1,4 +1,4 @@
-package DO_AN.OOP.modal.DISHES;
+package DO_AN.OOP.model.DISHES;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

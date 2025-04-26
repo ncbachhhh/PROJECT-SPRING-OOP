@@ -1,4 +1,4 @@
-package DO_AN.OOP.modal.ACCOUNT;
+package DO_AN.OOP.model.ACCOUNT;
 
 public enum Role {
     MANAGER,

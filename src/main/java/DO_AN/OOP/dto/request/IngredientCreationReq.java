@@ -1,6 +1,6 @@
 package DO_AN.OOP.dto.request;
 
-import DO_AN.OOP.modal.INGREDIENT.TypeIngredient;
+import DO_AN.OOP.model.INGREDIENT.TypeIngredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

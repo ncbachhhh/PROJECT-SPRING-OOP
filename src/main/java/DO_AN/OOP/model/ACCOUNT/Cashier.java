@@ -1,4 +1,4 @@
-package DO_AN.OOP.modal.ACCOUNT;
+package DO_AN.OOP.model.ACCOUNT;
 
 import jakarta.persistence.Entity;
 import lombok.EqualsAndHashCode;
@@ -13,5 +13,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Chef extends Account {
+public class Cashier extends Account {
 }

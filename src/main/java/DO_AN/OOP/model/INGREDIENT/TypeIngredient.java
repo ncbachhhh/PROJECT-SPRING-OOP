@@ -1,4 +1,4 @@
-package DO_AN.OOP.modal.INGREDIENT;
+package DO_AN.OOP.model.INGREDIENT;
 
 public enum TypeIngredient {
     Thịt,

@@ -1,6 +1,6 @@
 package DO_AN.OOP.dto.request;
 
-import DO_AN.OOP.modal.ACCOUNT.Role;
+import DO_AN.OOP.model.ACCOUNT.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

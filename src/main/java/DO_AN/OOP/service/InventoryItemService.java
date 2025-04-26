@@ -2,7 +2,7 @@ package DO_AN.OOP.service;
 
 import DO_AN.OOP.dto.request.InventoryItemCreationReq;
 import DO_AN.OOP.dto.request.InventoryItemUpdateReq;
-import DO_AN.OOP.modal.INGREDIENT.InventoryItem;
+import DO_AN.OOP.model.INGREDIENT.InventoryItem;
 import DO_AN.OOP.repository.INGREDIENT.InventoryItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

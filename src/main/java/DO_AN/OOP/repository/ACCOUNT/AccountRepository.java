@@ -1,6 +1,6 @@
 package DO_AN.OOP.repository.ACCOUNT;
 
-import DO_AN.OOP.modal.ACCOUNT.Account;
+import DO_AN.OOP.model.ACCOUNT.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

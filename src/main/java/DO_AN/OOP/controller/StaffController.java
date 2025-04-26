@@ -4,7 +4,7 @@ import DO_AN.OOP.dto.request.LoginReq;
 import DO_AN.OOP.dto.request.StaffCreationReq;
 import DO_AN.OOP.dto.request.StaffUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
-import DO_AN.OOP.modal.ACCOUNT.Account;
+import DO_AN.OOP.model.ACCOUNT.Account;
 import DO_AN.OOP.service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

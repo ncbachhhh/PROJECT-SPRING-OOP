@@ -1,18 +1,18 @@
 package DO_AN.OOP.dto.request;
 
-import DO_AN.OOP.model.INGREDIENT.TypeIngredient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class IngredientUpdateReq {
+@AllArgsConstructor
+public class RecipeUpdateReq {
     private String name;
-    private Float unitWeight;
-    private TypeIngredient type;
-    private Float minimumAmount;
+    private String description;
+    private List<RecipeIngredientReq> ingredients;
 }

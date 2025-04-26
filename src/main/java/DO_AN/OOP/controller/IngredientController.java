@@ -3,7 +3,7 @@ package DO_AN.OOP.controller;
 import DO_AN.OOP.dto.request.IngredientCreationReq;
 import DO_AN.OOP.dto.request.IngredientUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
-import DO_AN.OOP.modal.INGREDIENT.Ingredient;
+import DO_AN.OOP.model.INGREDIENT.Ingredient;
 import DO_AN.OOP.service.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

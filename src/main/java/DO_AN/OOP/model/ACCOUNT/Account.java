@@ -1,4 +1,4 @@
-package DO_AN.OOP.modal.ACCOUNT;
+package DO_AN.OOP.model.ACCOUNT;
 
 import jakarta.persistence.*;
 import lombok.Getter;

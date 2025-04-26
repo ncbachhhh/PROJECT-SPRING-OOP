@@ -2,7 +2,7 @@ package DO_AN.OOP.service;
 
 import DO_AN.OOP.dto.request.IngredientCreationReq;
 import DO_AN.OOP.dto.request.IngredientUpdateReq;
-import DO_AN.OOP.modal.INGREDIENT.Ingredient;
+import DO_AN.OOP.model.INGREDIENT.Ingredient;
 import DO_AN.OOP.repository.INGREDIENT.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,14 +58,14 @@ public class IngredientService {
         return ingredients;
     }
 
-    //    Tìm các nguyên liệu có tồn dư dưới 5
+    //    Tìm các nguyên liệu có tồn dư thấp hơn mức minimumAmount của từng nguyên liệu
     public List<Ingredient> getLowStockIngredients() {
         List<Ingredient> allIngredients = ingredientRepository.findAll();
 
         return allIngredients.stream()
                 .filter(ingredient -> {
                     Float remaining = inventoryItemService.getRemainingQuantityByIngredientId(ingredient.getId());
-                    return remaining != null && remaining < 5f;
+                    return remaining != null && remaining < ingredient.getMinimumAmount();
                 })
                 .collect(Collectors.toList());
     }

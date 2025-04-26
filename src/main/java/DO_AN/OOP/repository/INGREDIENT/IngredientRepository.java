@@ -1,6 +1,6 @@
 package DO_AN.OOP.repository.INGREDIENT;
 
-import DO_AN.OOP.modal.INGREDIENT.Ingredient;
+import DO_AN.OOP.model.INGREDIENT.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
