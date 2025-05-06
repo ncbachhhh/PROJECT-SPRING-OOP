@@ -11,40 +11,38 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
+
     @Autowired
     private RecipeService recipeService;
 
-    //    Thêm công thức
+    // Thêm công thức món ăn
     @PostMapping("/create")
-    ApiResponse<Recipe> createRecipe(@RequestBody RecipeCreationReq req) {
+    public ApiResponse<Recipe> createRecipe(@RequestBody RecipeCreationReq req) {
         ApiResponse<Recipe> response = new ApiResponse<>();
-        Recipe recipe = recipeService.createRecipe(req);
-
-        if (recipe != null) {
+        try {
+            Recipe recipe = recipeService.createRecipe(req);
             response.setMessage("Thêm công thức thành công");
             response.setResult(recipe);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Thêm công thức thất bại");
+            response.setMessage("Thêm công thức thất bại: " + e.getMessage());
         }
-
         return response;
     }
 
-    //    Sửa công thức
+    // Sửa công thức món ăn
     @PostMapping("/update/{recipeId}")
-    ApiResponse<Recipe> updateRecipe(@PathVariable("recipeId") String recipeId, @RequestBody RecipeUpdateReq req) {
+    public ApiResponse<Recipe> updateRecipe(@PathVariable("recipeId") String recipeId,
+                                            @RequestBody RecipeUpdateReq req) {
         ApiResponse<Recipe> response = new ApiResponse<>();
-        Recipe recipe = recipeService.updateRecipe(recipeId, req);
-
-        if (recipe != null) {
+        try {
+            Recipe recipe = recipeService.updateRecipe(recipeId, req);
             response.setMessage("Cập nhật công thức thành công");
             response.setResult(recipe);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Cập nhật công thức thất bại");
+            response.setMessage("Cập nhật công thức thất bại: " + e.getMessage());
         }
-
         return response;
     }
 }

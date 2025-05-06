@@ -13,74 +13,70 @@ import java.util.List;
 @RestController
 @RequestMapping("/ingredient")
 public class IngredientController {
+
     @Autowired
     private IngredientService ingredientService;
 
-    //    Thêm nguyên liệu
+    // Thêm nguyên liệu
     @PostMapping("/create")
-    ApiResponse<Ingredient> createIngredient(@RequestBody IngredientCreationReq req) {
+    public ApiResponse<Ingredient> createIngredient(@RequestBody IngredientCreationReq req) {
         ApiResponse<Ingredient> response = new ApiResponse<>();
-        Ingredient ingredient = ingredientService.createIngredient(req);
-
-        if (ingredient != null) {
+        try {
+            Ingredient ingredient = ingredientService.createIngredient(req);
             response.setMessage("Thêm nguyên liệu thành công");
             response.setResult(ingredient);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Thêm nguyên liệu thất bại");
+            response.setMessage("Thêm nguyên liệu thất bại: " + e.getMessage());
         }
-
         return response;
     }
 
-    //    Cập nhật nguyên liệu
+    // Cập nhật nguyên liệu
     @PostMapping("/update/{ingredientId}")
-    ApiResponse<Ingredient> updateIngredient(@PathVariable("ingredientId") String ingredientId, @RequestBody IngredientUpdateReq req) {
-        ApiResponse<Ingredient> response = new ApiResponse<>();
-        Ingredient ingredient = ingredientService.updateIngredient(ingredientId, req);
+    public ApiResponse<Ingredient> updateIngredient(
+            @PathVariable("ingredientId") String ingredientId,
+            @RequestBody IngredientUpdateReq req) {
 
-        if (ingredient != null) {
+        ApiResponse<Ingredient> response = new ApiResponse<>();
+        try {
+            Ingredient ingredient = ingredientService.updateIngredient(ingredientId, req);
             response.setMessage("Cập nhật nguyên liệu thành công");
             response.setResult(ingredient);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Cập nhật nguyên liệu thất bại");
+            response.setMessage("Cập nhật nguyên liệu thất bại: " + e.getMessage());
         }
-
         return response;
     }
 
-    //    Lấy danh sách nguyên liệu
+    // Lấy danh sách nguyên liệu
     @GetMapping("/get/ingredients")
-    ApiResponse<List<Ingredient>> getIngredients() {
+    public ApiResponse<List<Ingredient>> getIngredients() {
         ApiResponse<List<Ingredient>> response = new ApiResponse<>();
-        List<Ingredient> ingredients = ingredientService.getAllIngredients();
-
-        if (ingredients != null) {
+        try {
+            List<Ingredient> ingredients = ingredientService.getAllIngredients();
             response.setMessage("Lấy danh sách nguyên liệu thành công");
             response.setResult(ingredients);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Lấy danh sách nguyên liệu thất bại");
+            response.setMessage("Lấy danh sách nguyên liệu thất bại: " + e.getMessage());
         }
-
         return response;
     }
 
-    //   Lấy danh sách nguyên liệu có tồn dư dưới 5
+    // Lấy danh sách nguyên liệu tồn dư dưới minimumAmount
     @GetMapping("/get/low-stock")
-    ApiResponse<List<Ingredient>> getLowStockIngredients() {
+    public ApiResponse<List<Ingredient>> getLowStockIngredients() {
         ApiResponse<List<Ingredient>> response = new ApiResponse<>();
-        List<Ingredient> ingredients = ingredientService.getLowStockIngredients();
-
-        if (ingredients != null) {
-            response.setMessage("Lấy danh sách nguyên liệu có tồn dư dưới 5 thành công");
+        try {
+            List<Ingredient> ingredients = ingredientService.getLowStockIngredients();
+            response.setMessage("Lấy danh sách nguyên liệu tồn dư thấp thành công");
             response.setResult(ingredients);
-        } else {
+        } catch (RuntimeException e) {
             response.setCode(400);
-            response.setMessage("Lấy danh sách nguyên liệu có tồn dư dưới 5 thất bại");
+            response.setMessage("Lấy danh sách nguyên liệu tồn dư thấp thất bại: " + e.getMessage());
         }
-
         return response;
     }
 }

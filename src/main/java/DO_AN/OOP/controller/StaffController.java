@@ -14,83 +14,82 @@ import java.util.List;
 @RestController
 @RequestMapping("/staff")
 public class StaffController {
+
     @Autowired
     private StaffService staffService;
 
+    // Tạo tài khoản nhân viên
     @PostMapping("/create")
-    ApiResponse<Account> createAccount(@RequestBody StaffCreationReq req) {
+    public ApiResponse<Account> createAccount(@RequestBody StaffCreationReq req) {
         ApiResponse<Account> response = new ApiResponse<>();
-
-        response.setResult(staffService.createAccount(req));
-
-        if (response.getResult() != null) {
-            response.setMessage("Account created successfully");
-        } else {
-            response.setCode(500);
-            response.setMessage("Account creation failed");
+        try {
+            Account account = staffService.createAccount(req);
+            response.setMessage("Tạo tài khoản thành công");
+            response.setResult(account);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Tạo tài khoản thất bại: " + e.getMessage());
         }
-
         return response;
     }
 
+    // Lấy tất cả tài khoản
     @GetMapping("/get/users")
     public ApiResponse<List<Account>> getAllAccounts() {
         ApiResponse<List<Account>> response = new ApiResponse<>();
-        response.setResult(staffService.getAllAccounts());
-
-        if (response.getResult() != null) {
-            response.setMessage("Accounts retrieved successfully");
-        } else {
-            response.setCode(500);
-            response.setMessage("Failed to retrieve accounts");
+        try {
+            List<Account> accounts = staffService.getAllAccounts();
+            response.setMessage("Lấy danh sách tài khoản thành công");
+            response.setResult(accounts);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Không thể lấy danh sách tài khoản: " + e.getMessage());
         }
-
         return response;
     }
 
+    // Lấy tài khoản theo ID
     @GetMapping("/get/user/{accountId}")
     public ApiResponse<Account> getAccountById(@PathVariable("accountId") String accountId) {
         ApiResponse<Account> response = new ApiResponse<>();
-        response.setResult(staffService.getAccountById(accountId));
-
-        if (response.getResult() != null) {
-            response.setMessage("Account retrieved successfully");
-        } else {
-            response.setCode(500);
-            response.setMessage("Failed to retrieve account");
-        }
-
-        return response;
-    }
-
-    @PostMapping("/update/{accountId}")
-    ApiResponse<Account> updateAccount(@PathVariable("accountId") String accountId, @RequestBody StaffUpdateReq req) {
-        ApiResponse<Account> response = new ApiResponse<>();
-        Account updatedAccount = staffService.updateAccount(accountId, req);
-
-        if (updatedAccount != null) {
-            response.setResult(updatedAccount);
-            response.setMessage("Account updated successfully");
-        } else {
-            response.setCode(500);
-            response.setMessage("Account update failed");
-        }
-
-        return response;
-    }
-
-    @PostMapping("/login")
-    ApiResponse<Account> login(@RequestBody LoginReq req) {
-        ApiResponse<Account> response = new ApiResponse<>();
-
-        Account account = staffService.login(req);
-
-        if (account != null) {
+        try {
+            Account account = staffService.getAccountById(accountId);
+            response.setMessage("Lấy tài khoản thành công");
             response.setResult(account);
-            response.setMessage("Login successful");
-        } else {
-            response.setCode(500);
-            response.setMessage("Login failed");
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Không tìm thấy tài khoản: " + e.getMessage());
+        }
+        return response;
+    }
+
+    // Cập nhật thông tin tài khoản
+    @PostMapping("/update/{accountId}")
+    public ApiResponse<Account> updateAccount(@PathVariable("accountId") String accountId,
+                                              @RequestBody StaffUpdateReq req) {
+        ApiResponse<Account> response = new ApiResponse<>();
+        try {
+            Account updatedAccount = staffService.updateAccount(accountId, req);
+            response.setMessage("Cập nhật tài khoản thành công");
+            response.setResult(updatedAccount);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Cập nhật tài khoản thất bại: " + e.getMessage());
+        }
+        return response;
+    }
+
+    // Đăng nhập
+    @PostMapping("/login")
+    public ApiResponse<Account> login(@RequestBody LoginReq req) {
+        ApiResponse<Account> response = new ApiResponse<>();
+        try {
+            Account account = staffService.login(req);
+            response.setMessage("Đăng nhập thành công");
+            response.setResult(account);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Đăng nhập thất bại: " + e.getMessage());
         }
         return response;
     }
