@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.DISHES;
 
 import DO_AN.OOP.model.DISHES.DishStatus;
 import DO_AN.OOP.model.DISHES.DishType;

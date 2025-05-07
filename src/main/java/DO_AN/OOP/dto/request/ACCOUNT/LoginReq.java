@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.ACCOUNT;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class OrderRemoveDishReq {
-    private String dishId; // Món cần xóa khỏi đơn
+public class LoginReq {
+    private String phone;
+    private String password;
 }

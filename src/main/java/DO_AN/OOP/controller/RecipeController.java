@@ -1,7 +1,7 @@
 package DO_AN.OOP.controller;
 
-import DO_AN.OOP.dto.request.RecipeCreationReq;
-import DO_AN.OOP.dto.request.RecipeUpdateReq;
+import DO_AN.OOP.dto.request.DISHES.RecipeCreationReq;
+import DO_AN.OOP.dto.request.DISHES.RecipeUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
 import DO_AN.OOP.model.DISHES.Recipe;
 import DO_AN.OOP.service.RecipeService;

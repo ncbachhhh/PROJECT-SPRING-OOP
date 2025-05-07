@@ -1,7 +1,7 @@
 package DO_AN.OOP.controller;
 
-import DO_AN.OOP.dto.request.InventoryItemCreationReq;
-import DO_AN.OOP.dto.request.InventoryItemUpdateReq;
+import DO_AN.OOP.dto.request.INGREDIENT.InventoryItemCreationReq;
+import DO_AN.OOP.dto.request.INGREDIENT.InventoryItemUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
 import DO_AN.OOP.model.INGREDIENT.InventoryItem;
 import DO_AN.OOP.service.InventoryItemService;

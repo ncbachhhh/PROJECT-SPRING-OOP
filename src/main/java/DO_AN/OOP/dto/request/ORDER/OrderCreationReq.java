@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.ORDER;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

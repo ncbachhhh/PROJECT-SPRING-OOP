@@ -1,8 +1,8 @@
 package DO_AN.OOP.service;
 
-import DO_AN.OOP.dto.request.LoginReq;
-import DO_AN.OOP.dto.request.StaffCreationReq;
-import DO_AN.OOP.dto.request.StaffUpdateReq;
+import DO_AN.OOP.dto.request.ACCOUNT.LoginReq;
+import DO_AN.OOP.dto.request.ACCOUNT.StaffCreationReq;
+import DO_AN.OOP.dto.request.ACCOUNT.StaffUpdateReq;
 import DO_AN.OOP.model.ACCOUNT.Account;
 import DO_AN.OOP.model.ACCOUNT.Cashier;
 import DO_AN.OOP.model.ACCOUNT.Chef;

@@ -1,6 +1,6 @@
 package DO_AN.OOP.service;
 
-import DO_AN.OOP.dto.request.InvoiceCreationReq;
+import DO_AN.OOP.dto.request.INVOICE.InvoiceCreationReq;
 import DO_AN.OOP.model.ACCOUNT.Account;
 import DO_AN.OOP.model.INVOICE.Invoice;
 import DO_AN.OOP.model.ORDER.Order;

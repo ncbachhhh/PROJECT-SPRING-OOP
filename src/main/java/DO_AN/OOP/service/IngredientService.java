@@ -1,7 +1,7 @@
 package DO_AN.OOP.service;
 
-import DO_AN.OOP.dto.request.IngredientCreationReq;
-import DO_AN.OOP.dto.request.IngredientUpdateReq;
+import DO_AN.OOP.dto.request.INGREDIENT.IngredientCreationReq;
+import DO_AN.OOP.dto.request.INGREDIENT.IngredientUpdateReq;
 import DO_AN.OOP.model.INGREDIENT.Ingredient;
 import DO_AN.OOP.repository.INGREDIENT.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;

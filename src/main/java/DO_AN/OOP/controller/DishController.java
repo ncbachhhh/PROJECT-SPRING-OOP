@@ -1,7 +1,7 @@
 package DO_AN.OOP.controller;
 
-import DO_AN.OOP.dto.request.DishCreationReq;
-import DO_AN.OOP.dto.request.DishUpdateReq;
+import DO_AN.OOP.dto.request.DISHES.DishCreationReq;
+import DO_AN.OOP.dto.request.DISHES.DishUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
 import DO_AN.OOP.model.DISHES.Dish;
 import DO_AN.OOP.model.DISHES.DishStatus;

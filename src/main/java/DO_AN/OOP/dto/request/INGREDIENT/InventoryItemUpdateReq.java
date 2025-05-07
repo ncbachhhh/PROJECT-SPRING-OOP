@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.INGREDIENT;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,9 +11,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class InventoryItemCreationReq {
-    private String ingredientId;
+public class InventoryItemUpdateReq {
     private Float quantity;
     private LocalDate expirationDate;
-    private String userId;
 }

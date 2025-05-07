@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.INVOICE;
 
 import DO_AN.OOP.model.INVOICE.PaymentMethod;
 import lombok.AllArgsConstructor;

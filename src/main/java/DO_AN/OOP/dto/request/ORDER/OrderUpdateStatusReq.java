@@ -1,16 +1,15 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.ORDER;
 
+import DO_AN.OOP.model.ORDER.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderUpdateDishesReq {
-    private List<OrderItemReq> dishes;
+public class OrderUpdateStatusReq {
+    private OrderStatus status;
 }

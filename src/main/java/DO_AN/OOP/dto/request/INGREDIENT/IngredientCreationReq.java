@@ -1,4 +1,4 @@
-package DO_AN.OOP.dto.request;
+package DO_AN.OOP.dto.request.INGREDIENT;
 
 import DO_AN.OOP.model.INGREDIENT.TypeIngredient;
 import lombok.AllArgsConstructor;
