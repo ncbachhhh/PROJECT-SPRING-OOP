@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class InvoiceCreationReq {
-    private Float totalPay;
     private PaymentMethod method;
     private String orderId;
     private String phone; // tra ra accId từ đây

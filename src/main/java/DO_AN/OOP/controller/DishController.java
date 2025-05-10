@@ -3,6 +3,7 @@ package DO_AN.OOP.controller;
 import DO_AN.OOP.dto.request.DISHES.DishCreationReq;
 import DO_AN.OOP.dto.request.DISHES.DishUpdateReq;
 import DO_AN.OOP.dto.response.ApiResponse;
+import DO_AN.OOP.dto.response.DishAvailabilityRes;
 import DO_AN.OOP.model.DISHES.Dish;
 import DO_AN.OOP.model.DISHES.DishStatus;
 import DO_AN.OOP.model.DISHES.DishType;
@@ -120,4 +121,20 @@ public class DishController {
 
         return response;
     }
+
+    // Lấy số món ăn có thể chế biến dựa trên nguyên liệu
+    @GetMapping("/available-dishes")
+    public ApiResponse<List<DishAvailabilityRes>> getAvailableDishes() {
+        ApiResponse<List<DishAvailabilityRes>> response = new ApiResponse<>();
+        try {
+            List<DishAvailabilityRes> dishes = dishService.calculateDishAvailabilityBasedOnInventory();
+            response.setMessage("Tính toán số phần món ăn có thể chế biến thành công");
+            response.setResult(dishes);
+        } catch (Exception e) {
+            response.setCode(500);
+            response.setMessage("Lỗi khi tính số phần món ăn: " + e.getMessage());
+        }
+        return response;
+    }
+
 }

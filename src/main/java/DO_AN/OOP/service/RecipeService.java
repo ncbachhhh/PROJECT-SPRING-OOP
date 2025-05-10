@@ -19,7 +19,7 @@ public class RecipeService {
     public Recipe createRecipe(RecipeCreationReq req) {
         List<RecipeIngredient> ingredients = req.getIngredients().stream()
                 .map(i -> RecipeIngredient.builder()
-                        .id(i.getId())
+                        .ingredientId(i.getId())
                         .quantity(i.getQuantity())
                         .build())
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class RecipeService {
 
         List<RecipeIngredient> ingredients = req.getIngredients().stream()
                 .map(i -> RecipeIngredient.builder()
-                        .id(i.getId())
+                        .ingredientId(i.getId())
                         .quantity(i.getQuantity())
                         .build())
                 .collect(Collectors.toList());

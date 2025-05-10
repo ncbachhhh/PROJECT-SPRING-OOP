@@ -2,15 +2,22 @@ package DO_AN.OOP.service;
 
 import DO_AN.OOP.dto.request.ORDER.*;
 import DO_AN.OOP.model.DISHES.Dish;
+import DO_AN.OOP.model.INGREDIENT.Ingredient;
+import DO_AN.OOP.model.INGREDIENT.InventoryItem;
 import DO_AN.OOP.model.ORDER.Order;
 import DO_AN.OOP.model.ORDER.OrderItem;
 import DO_AN.OOP.model.ORDER.OrderStatus;
 import DO_AN.OOP.repository.DISHES.DishRepository;
+import DO_AN.OOP.repository.DISHES.RecipeRepository;
+import DO_AN.OOP.repository.INGREDIENT.IngredientRepository;
+import DO_AN.OOP.repository.INGREDIENT.InventoryItemRepository;
 import DO_AN.OOP.repository.ORDER.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +29,12 @@ public class OrderService {
 
     @Autowired
     private DishRepository dishRepository;
+    @Autowired
+    private RecipeRepository recipeRepository;
+    @Autowired
+    private IngredientRepository ingredientRepository;
+    @Autowired
+    private InventoryItemRepository inventoryItemRepository;
 
     // Tạo mới đơn hàng
     public Order createOrder(OrderCreationReq req) {
@@ -56,14 +69,80 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
-    // Cập nhật trạng thái đơn hàng
+    //    Câp nhật trạng thái đơn hàng
     public Order updateOrderStatus(String orderId, OrderUpdateStatusReq req) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Đơn hàng không tồn tại"));
 
         order.setStatus(req.getStatus());
 
+        // Nếu đơn hàng chuyển sang trạng thái hoàn thành, trừ nguyên liệu
+        if (req.getStatus() == OrderStatus.DA_HOAN_THANH) {
+            deductIngredientsFromInventory(order);
+        }
+
         return orderRepository.save(order);
+    }
+
+    // Phương thức trừ nguyên liệu khi đơn hàng hoàn thành
+    private void deductIngredientsFromInventory(Order order) {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = localDateTime.toLocalDate();
+        // Lấy danh sách món ăn trong đơn hàng
+        List<OrderItem> orderItems = order.getDishes();
+
+        for (OrderItem orderItem : orderItems) {
+            // Lấy thông tin món ăn
+            Dish dish = dishRepository.findById(orderItem.getDishId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy món ăn: " + orderItem.getDishId()));
+
+            // Lấy công thức của món ăn
+            recipeRepository.findById(dish.getRecipeId())
+                    .ifPresent(recipe -> {
+                        // Duyệt qua từng nguyên liệu trong công thức
+                        recipe.getIngredients().forEach(recipeIngredient -> {
+                            // Tính tổng lượng nguyên liệu cần trừ
+                            float totalNeeded = recipeIngredient.getQuantity() * orderItem.getQuantity();
+
+                            // Lấy danh sách các lô nguyên liệu trong kho (sắp xếp theo hạn dùng)
+                            List<InventoryItem> inventoryItems = inventoryItemRepository
+                                    .findByIngredientIdAndQuantityGreaterThanAndExpirationDateAfterOrderByExpirationDateAsc(
+                                            recipeIngredient.getIngredientId(),
+                                            0f,
+                                            localDate);
+
+                            List<InventoryItem> updatedItems = new ArrayList<>();
+
+                            // Trừ nguyên liệu từ các lô
+                            for (InventoryItem item : inventoryItems) {
+                                if (totalNeeded <= 0) break;
+
+                                if (item.getQuantity() >= totalNeeded) {
+                                    // Nếu lô hàng đủ số lượng cần trừ
+                                    item.setQuantity(item.getQuantity() - totalNeeded);
+                                    totalNeeded = 0;
+                                } else {
+                                    // Nếu lô hàng không đủ, trừ hết lô này và chuyển sang lô khác
+                                    totalNeeded -= item.getQuantity();
+                                    item.setQuantity(0f);
+                                }
+                                updatedItems.add(item);
+                            }
+
+                            // Lưu lại các thay đổi trong kho
+                            inventoryItemRepository.saveAll(updatedItems);
+
+                            // Kiểm tra nếu không đủ nguyên liệu
+                            if (totalNeeded > 0) {
+                                throw new RuntimeException("Không đủ nguyên liệu " +
+                                        ingredientRepository.findById(recipeIngredient.getIngredientId())
+                                                .map(Ingredient::getName)
+                                                .orElse("Không tìm thấy nguyên liệu") +
+                                        " để hoàn thành đơn hàng");
+                            }
+                        });
+                    });
+        }
     }
 
     //    Update món ăn

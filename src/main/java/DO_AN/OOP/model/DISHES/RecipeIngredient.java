@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Embeddable
 public class RecipeIngredient {
-    private String id;
+    private String ingredientId;
     private Float quantity;
 }
