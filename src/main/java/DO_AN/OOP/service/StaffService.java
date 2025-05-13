@@ -3,6 +3,7 @@ package DO_AN.OOP.service;
 import DO_AN.OOP.dto.request.ACCOUNT.LoginReq;
 import DO_AN.OOP.dto.request.ACCOUNT.StaffCreationReq;
 import DO_AN.OOP.dto.request.ACCOUNT.StaffUpdateReq;
+import DO_AN.OOP.dto.request.ATTENDANCE.AttendanceRequest;
 import DO_AN.OOP.model.ACCOUNT.Account;
 import DO_AN.OOP.model.ACCOUNT.Cashier;
 import DO_AN.OOP.model.ACCOUNT.Chef;
@@ -10,6 +11,7 @@ import DO_AN.OOP.model.ACCOUNT.Manager;
 import DO_AN.OOP.repository.ACCOUNT.AccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +21,12 @@ import java.util.List;
 public class StaffService {
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private AttendanceService attendanceService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //    Tạo mới tài khoản
     public Account createAccount(StaffCreationReq req) {
@@ -34,7 +42,7 @@ public class StaffService {
         };
 
         account.setUsername(req.getUsername());
-        account.setPassword(req.getPassword());
+        account.setPassword(passwordEncoder.encode(req.getPassword())); // ✅ Mã hóa tại đây
         account.setStatus("Đang hoạt động");
         account.setRole(req.getRole());
         account.setAddress(req.getAddress());
@@ -70,7 +78,7 @@ public class StaffService {
             throw new RuntimeException("Phone number already exists");
         }
 
-        account.setPassword(req.getPassword());
+        account.setPassword(passwordEncoder.encode(req.getPassword()));
         account.setPhone(req.getPhone());
         account.setEmail(req.getEmail());
         account.setAddress(req.getAddress());
@@ -94,13 +102,17 @@ public class StaffService {
     public Account login(LoginReq req) {
         Account account = accountRepository.findByPhone(req.getPhone()).orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản"));
 
-        if (!account.getPassword().equals(req.getPassword())) {
-            throw new RuntimeException("Sai mât khẩu");
+        if (!passwordEncoder.matches(req.getPassword(), account.getPassword())) {
+            throw new RuntimeException("Sai mật khẩu");
         }
 
         if (!account.getStatus().equals("Đang hoạt động")) {
             throw new RuntimeException("Tài khoản đã bị khóa");
         }
+
+        // Tạo Attendance khi login thành công (chấm công vào)
+        AttendanceRequest attendanceRequest = new AttendanceRequest(account.getId());  // Truyền accId vào request
+        attendanceService.clockIn(attendanceRequest);
 
         return account;
     }

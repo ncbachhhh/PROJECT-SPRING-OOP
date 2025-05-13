@@ -8,6 +8,7 @@ import DO_AN.OOP.model.ACCOUNT.Role;
 import DO_AN.OOP.repository.ACCOUNT.AccountRepository;
 import DO_AN.OOP.repository.ACCOUNT.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +22,9 @@ public class CustomerService {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Customer createCustomer(CustomerCreationReq req) {
         // Kiểm tra số điện thoại đã tồn tại chưa
         if (accountRepository.existsByPhone(req.getPhone())) {
@@ -30,7 +34,7 @@ public class CustomerService {
         // Tạo mới Customer
         Customer customer = Customer.builder()
                 .username(req.getUsername())
-                .password(req.getPassword())
+                .password(passwordEncoder.encode(req.getPassword()))
                 .address(req.getAddress())
                 .phone(req.getPhone())
                 .email(req.getEmail())
@@ -47,7 +51,7 @@ public class CustomerService {
         Customer customer = customerRepository.findByPhone(req.getPhone())
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản khách hàng"));
 
-        if (!customer.getPassword().equals(req.getPassword())) {
+        if (!passwordEncoder.matches(req.getPassword(), customer.getPassword())) {
             throw new RuntimeException("Sai mật khẩu");
         }
 
