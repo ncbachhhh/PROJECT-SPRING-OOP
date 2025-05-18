@@ -22,5 +22,7 @@ public interface DishRepository extends JpaRepository<Dish, String> {
     // Tìm món ăn theo tên (tìm gần đúng)
     List<Dish> findByNameContainingIgnoreCase(String keyword);
 
+    List<Dish> findByTypeAndStatus(DishType type, DishStatus status);
+
     boolean existsByNameIgnoreCase(String name);
 }

@@ -73,11 +73,12 @@ public class DishController {
 
     // Tìm theo loại món ăn
     @GetMapping("/filter/type")
-    public ApiResponse<List<Dish>> filterByType(@RequestParam DishType type) {
+    public ApiResponse<List<Dish>> filterByType(@RequestParam DishType type,
+                                                @RequestParam DishStatus status) {
         ApiResponse<List<Dish>> response = new ApiResponse<>();
 
         try {
-            List<Dish> result = dishService.getDishesByType(type);
+            List<Dish> result = dishService.getDishesByType(type, status);
             response.setMessage("Lọc món theo loại thành công");
             response.setResult(result);
         } catch (RuntimeException e) {

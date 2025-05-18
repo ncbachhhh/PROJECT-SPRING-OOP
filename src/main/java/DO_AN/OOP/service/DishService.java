@@ -73,8 +73,8 @@ public class DishService {
     }
 
     // Tìm theo loại món ăn
-    public List<Dish> getDishesByType(DishType type) {
-        return dishRepository.findByType(type);
+    public List<Dish> getDishesByType(DishType type, DishStatus status) {
+        return dishRepository.findByTypeAndStatus(type, status);
     }
 
     // Lấy các món ăn có độ phổ biến >= mức chỉ định (từ 0 → 5)
