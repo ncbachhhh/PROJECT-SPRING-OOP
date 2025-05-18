@@ -138,4 +138,17 @@ public class DishController {
         return response;
     }
 
+    @GetMapping("/{dishId}")
+    public ApiResponse<Dish> getDishById(@PathVariable("dishId") String dishId) {
+        ApiResponse<Dish> response = new ApiResponse<>();
+        try {
+            Dish dish = dishService.getDishById(dishId);
+            response.setMessage("Lấy món ăn thành công");
+            response.setResult(dish);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy món ăn thất bại: " + e.getMessage());
+        }
+        return response;
+    }
 }

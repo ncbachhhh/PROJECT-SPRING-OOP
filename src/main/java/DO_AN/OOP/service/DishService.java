@@ -147,5 +147,10 @@ public class DishService {
         return resultList;
     }
 
+    //Lấy thông tin của 1 món
+    public Dish getDishById(String id) {
+        return dishRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Món ăn không tồn tại"));
+    }
 
 }
