@@ -52,4 +52,15 @@ public class RecipeService {
 
         return recipeRepository.save(recipe);
     }
+
+    // Lấy các công thức
+    public List<Recipe> getAllRecipes() {
+        return recipeRepository.findAll();
+    }
+
+    // Lấy công thức theo ID
+    public Recipe getRecipeById(String recipeId) {
+        return recipeRepository.findById(recipeId)
+                .orElseThrow(() -> new RuntimeException("Công thức không tồn tại"));
+    }
 }

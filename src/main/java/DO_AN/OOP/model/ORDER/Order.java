@@ -34,4 +34,6 @@ public class Order {
     private List<OrderItem> dishes;
 
     private String userId;
+
+    private String staffId;
 }

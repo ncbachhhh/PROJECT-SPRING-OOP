@@ -7,9 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, String> {
+
+    Optional<Order> findById(String id);
 
     // Lấy danh sách đơn hàng theo trạng thái
     List<Order> findByStatus(OrderStatus status);
@@ -22,4 +25,6 @@ public interface OrderRepository extends JpaRepository<Order, String> {
 
     // Lấy đơn hàng của user theo trạng thái
     List<Order> findByUserIdAndStatus(String userId, OrderStatus status);
+
+    Optional<Order> findTopByUserIdOrderByDateDesc(String userId);
 }

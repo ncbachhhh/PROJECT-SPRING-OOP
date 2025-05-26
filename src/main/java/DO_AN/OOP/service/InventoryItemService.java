@@ -41,7 +41,6 @@ public class InventoryItemService {
         inventoryItem.setExpirationDate(req.getExpirationDate());
 
         return inventoryItemRepository.save(inventoryItem);
-
     }
 
     // Tính toán xem sản phẩm nào hết hạn sau 7 ngày
@@ -67,5 +66,13 @@ public class InventoryItemService {
             totalQuantity += item.getQuantity();
         }
         return totalQuantity;
+    }
+
+    public void deleteInventoryItemsByIngredientId(String ingredientId) {
+        List<InventoryItem> inventoryItems = inventoryItemRepository.findByIngredientId(ingredientId);
+        if (inventoryItems.isEmpty()) {
+            throw new RuntimeException("Không có nguyên liệu nào với ID: " + ingredientId);
+        }
+        inventoryItemRepository.deleteAll(inventoryItems);
     }
 }

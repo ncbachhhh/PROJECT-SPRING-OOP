@@ -79,4 +79,17 @@ public class IngredientController {
         }
         return response;
     }
+
+    @GetMapping("/delete/{ingredientId}")
+    public ApiResponse<Void> deleteIngredient(@PathVariable("ingredientId") String ingredientId) {
+        ApiResponse<Void> response = new ApiResponse<>();
+        try {
+            ingredientService.deleteIngredient(ingredientId);
+            response.setMessage("Xóa nguyên liệu thành công");
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Xóa nguyên liệu thất bại: " + e.getMessage());
+        }
+        return response;
+    }
 }

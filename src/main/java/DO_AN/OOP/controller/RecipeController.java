@@ -8,6 +8,8 @@ import DO_AN.OOP.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -45,4 +47,33 @@ public class RecipeController {
         }
         return response;
     }
+
+    @GetMapping("/get/all")
+    public ApiResponse<List<Recipe>> getAllRecipes() {
+        ApiResponse<List<Recipe>> response = new ApiResponse<>();
+        try {
+            List<Recipe> recipes = recipeService.getAllRecipes();
+            response.setMessage("Lấy danh sách công thức thành công");
+            response.setResult(recipes);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy danh sách công thức thất bại: " + e.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/get/{recipeId}")
+    public ApiResponse<Recipe> getRecipeById(@PathVariable("recipeId") String recipeId) {
+        ApiResponse<Recipe> response = new ApiResponse<>();
+        try {
+            Recipe recipe = recipeService.getRecipeById(recipeId);
+            response.setMessage("Lấy công thức thành công");
+            response.setResult(recipe);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy công thức thất bại: " + e.getMessage());
+        }
+        return response;
+    }
+
 }

@@ -69,4 +69,16 @@ public class IngredientService {
                 })
                 .collect(Collectors.toList());
     }
+
+    //    Xóa nguyên liệu và tồn kho
+    public void deleteIngredient(String id) {
+        Ingredient ingredient = ingredientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Nguyên liệu không tồn tại"));
+
+        // Xóa tất cả các mục tồn kho liên quan đến nguyên liệu này
+        inventoryItemService.deleteInventoryItemsByIngredientId(id);
+
+        // Xóa nguyên liệu
+        ingredientRepository.delete(ingredient);
+    }
 }

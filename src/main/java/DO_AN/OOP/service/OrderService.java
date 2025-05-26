@@ -1,6 +1,8 @@
 package DO_AN.OOP.service;
 
+import DO_AN.OOP.dto.DishDTO;
 import DO_AN.OOP.dto.request.ORDER.*;
+import DO_AN.OOP.dto.response.OrderResponse;
 import DO_AN.OOP.model.DISHES.Dish;
 import DO_AN.OOP.model.INGREDIENT.Ingredient;
 import DO_AN.OOP.model.INGREDIENT.InventoryItem;
@@ -26,7 +28,6 @@ public class OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
-
     @Autowired
     private DishRepository dishRepository;
     @Autowired
@@ -258,5 +259,37 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    //     Hiển thị đơn hàng của user
+    public Order getOrderByUserId(String userId) {
+        return orderRepository.findTopByUserIdOrderByDateDesc(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng cho user: " + userId));
+    }
 
+    //    Lấy đơn hàng theo trạng thái
+    public List<Order> getOrdersByStatus(OrderStatus status) {
+        return orderRepository.findByStatus(status);
+    }
+
+    public OrderResponse getOrderById(String orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException(orderId));
+
+        List<DishDTO> dishes = order.getDishes().stream().map(orderDish -> {
+            Dish dish = dishRepository.findById(orderDish.getDishId())
+                    .orElseThrow(() -> new RuntimeException("Không tìm thấy món ăn với ID: " + orderDish.getDishId()));
+
+            return new DishDTO(dish.getName(), orderDish.getQuantity());
+        }).collect(Collectors.toList());
+
+        return new OrderResponse(
+                order.getId(),
+                order.getStatus(),
+                order.getTotalPrice(),
+                order.getDate(),
+                order.getNote(),
+                dishes,
+                order.getUserId(),
+                order.getStaffId()
+        );
+    }
 }

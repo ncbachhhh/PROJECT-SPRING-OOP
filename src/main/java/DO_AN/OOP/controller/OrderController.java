@@ -2,11 +2,15 @@ package DO_AN.OOP.controller;
 
 import DO_AN.OOP.dto.request.ORDER.*;
 import DO_AN.OOP.dto.response.ApiResponse;
+import DO_AN.OOP.dto.response.OrderResponse;
 import DO_AN.OOP.model.ORDER.Order;
+import DO_AN.OOP.model.ORDER.OrderStatus;
 import DO_AN.OOP.service.DishService;
 import DO_AN.OOP.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -102,4 +106,53 @@ public class OrderController {
         return response;
     }
 
+    //     Hiển thị đơn hàng của user
+    @GetMapping("/get/{userId}")
+    public ApiResponse<Order> getOrderByUserId(@PathVariable String userId) {
+        ApiResponse<Order> response = new ApiResponse<>();
+
+        try {
+            Order orders = orderService.getOrderByUserId(userId);
+            response.setMessage("Lấy đơn hàng thành công");
+            response.setResult(orders);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy đơn hàng thất bại: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    //  Lấy đơn hàng theo trạng thái
+    @GetMapping("/status/{status}")
+    public ApiResponse<List<Order>> getOrderByStatus(@PathVariable OrderStatus status) {
+        ApiResponse<List<Order>> response = new ApiResponse<>();
+
+        try {
+            List<Order> orders = orderService.getOrdersByStatus(status);
+            response.setMessage("Lấy danh sách đơn hàng theo trạng thái thành công");
+            response.setResult(orders);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy danh sách đơn hàng thất bại: " + e.getMessage());
+        }
+
+        return response;
+    }
+
+    @GetMapping("/get-by-id/{orderId}")
+    public ApiResponse<OrderResponse> getOrderById(@PathVariable String orderId) {
+        ApiResponse<OrderResponse> response = new ApiResponse<>();
+
+        try {
+            OrderResponse orderResponse = orderService.getOrderById(orderId);
+            response.setMessage("Lấy đơn hàng thành công");
+            response.setResult(orderResponse);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy đơn hàng thất bại: " + e.getMessage());
+        }
+
+        return response;
+    }
 }
