@@ -151,4 +151,18 @@ public class DishController {
         }
         return response;
     }
+
+    @GetMapping("/all")
+    public ApiResponse<List<Dish>> getAllDishes() {
+        ApiResponse<List<Dish>> response = new ApiResponse<>();
+        try {
+            List<Dish> dishes = dishService.getAllDishes();
+            response.setMessage("Lấy tất cả món ăn thành công");
+            response.setResult(dishes);
+        } catch (RuntimeException e) {
+            response.setCode(400);
+            response.setMessage("Lấy tất cả món ăn thất bại: " + e.getMessage());
+        }
+        return response;
+    }
 }

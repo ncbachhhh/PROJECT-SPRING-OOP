@@ -29,4 +29,7 @@ public class Invoice {
     private String orderId;
 
     private String accId; // mã khách hàng
+
+    @Enumerated(EnumType.STRING)
+    private InvoiceStatus status;
 }

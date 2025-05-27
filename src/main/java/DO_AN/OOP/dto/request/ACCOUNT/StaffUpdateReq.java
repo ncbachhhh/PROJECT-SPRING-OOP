@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StaffUpdateReq {
-    private String password;
+    private String username;
     private String address;
     private String phone;
     private String email;

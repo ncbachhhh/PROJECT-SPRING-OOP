@@ -153,4 +153,12 @@ public class DishService {
                 .orElseThrow(() -> new RuntimeException("Món ăn không tồn tại"));
     }
 
+    public List<Dish> getAllDishes() {
+        List<Dish> dishes = dishRepository.findAll();
+        if (dishes.isEmpty()) {
+            throw new RuntimeException("Không có món ăn nào trong hệ thống");
+        }
+        return dishes;
+    }
+
 }

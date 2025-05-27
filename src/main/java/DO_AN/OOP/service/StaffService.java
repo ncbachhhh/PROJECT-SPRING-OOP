@@ -4,10 +4,7 @@ import DO_AN.OOP.dto.request.ACCOUNT.LoginReq;
 import DO_AN.OOP.dto.request.ACCOUNT.StaffCreationReq;
 import DO_AN.OOP.dto.request.ACCOUNT.StaffUpdateReq;
 import DO_AN.OOP.dto.request.ATTENDANCE.AttendanceRequest;
-import DO_AN.OOP.model.ACCOUNT.Account;
-import DO_AN.OOP.model.ACCOUNT.Cashier;
-import DO_AN.OOP.model.ACCOUNT.Chef;
-import DO_AN.OOP.model.ACCOUNT.Manager;
+import DO_AN.OOP.model.ACCOUNT.*;
 import DO_AN.OOP.repository.ACCOUNT.AccountRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,7 @@ public class StaffService {
             case CHEF -> Chef.builder().build();
             case MANAGER -> Manager.builder().build();
             case CASHIER -> Cashier.builder().build();
+            case CUSTOMER -> Customer.builder().point(0).build();
             default -> throw new RuntimeException("Role không hợp lệ để tạo staff");
         };
 
@@ -70,7 +68,6 @@ public class StaffService {
     }
 
     //    Cập nhật tài khoản
-    @Transactional
     public Account updateAccount(String id, StaffUpdateReq req) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -78,7 +75,7 @@ public class StaffService {
             throw new RuntimeException("Phone number already exists");
         }
 
-        account.setPassword(passwordEncoder.encode(req.getPassword()));
+        account.setPassword(req.getUsername());
         account.setPhone(req.getPhone());
         account.setEmail(req.getEmail());
         account.setAddress(req.getAddress());
@@ -93,7 +90,7 @@ public class StaffService {
     public void deleteAccount(String id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
 
-        account.setStatus("Bị khóa");
+        account.setStatus("Đã b khóa");
 
         accountRepository.save(account);
     }
