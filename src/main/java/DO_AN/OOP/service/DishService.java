@@ -92,32 +92,44 @@ public class DishService {
 
     //    Lấy danh sách món ăn có thể chế biến
     public List<DishAvailabilityRes> calculateDishAvailabilityBasedOnInventory() {
+        // Lấy toàn bộ danh sách các món ăn
         List<Dish> dishes = dishRepository.findAll();
         List<DishAvailabilityRes> resultList = new ArrayList<>();
 
+        // Duyệt từng món ăn
         for (Dish dish : dishes) {
+            // Lấy công thức (Recipe) của món ăn đó
             Recipe recipe = recipeRepository.findById(dish.getRecipeId()).orElse(null);
+            // Nếu không có công thức hoặc công thức không có nguyên liệu thì bỏ qua món đó
             if (recipe == null || recipe.getIngredients() == null) continue;
 
+            // Biến lưu số phần tối đa có thể nấu, ban đầu cho là rất lớn (vô cực)
             int maxServings = Integer.MAX_VALUE;
 
+            // Duyệt từng nguyên liệu trong công thức
             for (RecipeIngredient ri : recipe.getIngredients()) {
                 String ingredientId = ri.getIngredientId();
-                Float requiredPerServing = ri.getQuantity(); // số gram cần cho 1 phần
+                Float requiredPerServing = ri.getQuantity(); // lượng nguyên liệu cần cho 1 phần
 
+                // Lấy thông tin nguyên liệu theo id
                 Ingredient ingredient = ingredientRepository.findById(ingredientId).orElse(null);
                 if (ingredient == null) {
+                    // Nếu không tìm thấy nguyên liệu thì món ăn không thể nấu được
                     maxServings = 0;
                     break;
                 }
 
-                // Tính tổng khối lượng tồn kho thực tế: sum(inventoryItem.quantity * unitWeight)
+                // Tính tổng lượng nguyên liệu có sẵn trong kho (cân nhắc ngày hết hạn)
                 float totalAvailable = 0f;
                 List<InventoryItem> inventoryList = inventoryItemRepository.findByIngredientId(ingredientId);
+
+                // Duyệt qua từng lô hàng tồn kho của nguyên liệu này
                 for (InventoryItem item : inventoryList) {
+                    // Bỏ qua nguyên liệu đã hết hạn hoặc không có ngày hết hạn
                     if (item.getExpirationDate() == null || item.getExpirationDate().isBefore(LocalDate.now())) {
                         continue;
                     }
+                    // Cộng dồn lượng thực tế tồn kho (số lượng * trọng lượng mỗi đơn vị)
                     totalAvailable += item.getQuantity() * ingredient.getUnitWeight();
                 }
 
@@ -127,16 +139,19 @@ public class DishService {
                 System.out.println("   Cần / phần: " + requiredPerServing);
                 System.out.println("   Nấu được: " + (int) (totalAvailable / requiredPerServing) + " phần");
 
-
+                // Nếu không còn nguyên liệu nào thì món này không thể nấu được nữa
                 if (totalAvailable <= 0) {
                     maxServings = 0;
                     break;
                 }
 
+                // Tính số phần có thể nấu từ nguyên liệu này
                 int possibleFromThisIngredient = (int) (totalAvailable / requiredPerServing);
+                // Lấy số phần nhỏ nhất giữa tất cả nguyên liệu (vì món cần đủ tất cả nguyên liệu)
                 maxServings = Math.min(maxServings, possibleFromThisIngredient);
             }
 
+            // Thêm kết quả cho món ăn này vào danh sách trả về
             resultList.add(DishAvailabilityRes.builder()
                     .dishId(dish.getId())
                     .dishName(dish.getName())
@@ -144,6 +159,7 @@ public class DishService {
                     .build());
         }
 
+        // Trả về danh sách món ăn và số phần tối đa có thể nấu được
         return resultList;
     }
 

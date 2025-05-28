@@ -29,8 +29,8 @@ public class AttendanceController {
     @GetMapping("/total-hours/{accId}")
     public double getTotalWorkHoursInMonth(
             @PathVariable String accId,
-            @RequestParam int month,  // Tháng cần tính (1-12)
-            @RequestParam int year) { // Năm cần tính (yyyy)
+            @RequestParam int month,
+            @RequestParam int year) {
 
         return attendanceService.getTotalWorkHoursInMonth(accId, month, year);
     }

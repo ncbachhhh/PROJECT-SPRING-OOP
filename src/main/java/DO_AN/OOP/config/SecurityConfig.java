@@ -10,10 +10,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Mở endpoint không yêu cầu đăng nhập
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable() // Disable CSRF (nếu dùng API)
+        http.csrf().disable() // Disable CSRF
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/staff/**",

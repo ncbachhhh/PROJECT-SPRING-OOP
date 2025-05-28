@@ -40,7 +40,7 @@ public class StaffService {
         };
 
         account.setUsername(req.getUsername());
-        account.setPassword(passwordEncoder.encode(req.getPassword())); // ✅ Mã hóa tại đây
+        account.setPassword(passwordEncoder.encode(req.getPassword()));
         account.setStatus("Đang hoạt động");
         account.setRole(req.getRole());
         account.setAddress(req.getAddress());
@@ -88,9 +88,9 @@ public class StaffService {
     //    Xóa tài khoản
     @Transactional
     public void deleteAccount(String id) {
-        Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
+        Account account = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Tài khoản không tồn tại"));
 
-        account.setStatus("Đã b khóa");
+        account.setStatus("Bị khóa");
 
         accountRepository.save(account);
     }
